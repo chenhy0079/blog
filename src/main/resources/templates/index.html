@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 载入文章头部页面，位置在/client文件夹下的header模板页面，模板名称th:fragment为header -->
+<div th:replace="/header::header(null,null)" />
+<body>
+<div class="am-g am-g-fixed blog-fixed index-page">
+    <div class="am-u-md-8 am-u-sm-12">
+
+
+
+
+        <!-- 文章遍历并分页展示 : 需要同学们手动完成，基本样式已经给出，请使用th标签及表达式完成页面展示 -->
+        <div th:each="info:${infos.list}">
+            <article class="am-g blog-entry-article">
+
+                <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
+                    <!-- 文章分类 -->
+                    <span class="blog-color"style="font-size: 15px;"><a>默认分类</a></span>
+                    <span>&nbsp;&nbsp;&nbsp;</span>
+                    <!-- 发布时间 -->
+                    <span style="font-size: 15px;" th:text="'发布于 '+ ${info.created}" />
+                    <h2>
+                        <!-- 文章标题 -->
+                        <div><a style="color: #0f9ae0;font-size: 20px;" th:text="${info.title}" />
+                        </div>
+                    </h2>
+                    <!-- 文章内容-->
+                    <div style="font-size: 16px;" th:text="${info.content}" />
+                </div>
+            </article>
+        </div>
+
+        <div class="modal-footer no-margin-top">
+            <ul class="pagination pull-right no-margin">
+
+                <!-- 首页 -->
+                <li>
+                    <a  th:href="'/getInfos?pageNum=1&pageSize='+${infos.getPageSize()}">首页</a>
+                </li>
+
+                <!-- 上一页 -->
+                <li th:if="${infos.isHasPreviousPage()}">
+                    <a th:href="'/getInfos?pageNum=' + ${infos.pageNum-1}+'&pageSize='+${infos.pageSize}" th:text="上一页"></a>
+                </li>
+
+                <!-- 中间页 -->
+                <li  th:each="pageNum:${#numbers.sequence(1, infos.getPages())}">
+                    <a th:href="'/getInfos?pageNum=' + ${pageNum}" th:text="${pageNum}" th:if="${pageNum ne infos.pageNum}"></a>
+                    <a th:href="'/getInfos?pageNum=' + ${pageNum}" th:text="${pageNum}"  th:if="${pageNum eq infos.pageNum}" th:style="'font-weight:bold;background: #6faed9;'"></a>
+
+                </li>
+
+                <!-- 下一页 -->
+                <li th:if="${infos.isHasNextPage()}">
+                    <a th:href="'/getInfos?pageNum=' + ${infos.pageNum+1}+'&pageSize='+${infos.pageSize}" th:text="下一页"></a>
+                </li>
+
+                <!-- 尾页 -->
+                <li>
+                    <a  th:href="'/getInfos?pageNum=' + ${infos.pages}+'&pageSize='+${infos.pageSize}">尾页</a>
+                </li>
+
+            </ul>
+        </div>
+
+
+
+    </div>
+    <!-- 博主信息描述 -->
+    <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
+        <div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-text-center blog-title"><span>子慕</span></h2>
+            <img th:src="@{/assets/img/me.jpg}" alt="about me" class="blog-entry-img"/>
+            <p>
+                Java后台开发
+            </p>
+            <p>个人博客小站，主要发表关于Java、Spring、Docker等相关文章</p>
+        </div>
+        <div class="blog-sidebar-widget blog-bor">
+            <h2 class="blog-text-center blog-title"><span>联系我</span></h2>
+            <p>
+                <a><span class="am-icon-github am-icon-fw blog-icon"></span></a>
+                <a><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
+            </p>
+        </div>
+    </div>
+
+</div>
+</body>
+<!-- 载入文章尾部页面，位置在/client文件夹下的footer模板页面，模板名称th:fragment为footer -->
+<div th:replace="/footer::footer" />
+</html>
